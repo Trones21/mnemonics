@@ -2,16 +2,21 @@ package main
 
 import (
 	"fmt"
+	"mnemonics/database"
 	"mnemonics/mnemonic"
 	"net/http"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const apiBasePath = "/api"
 
 func main() {
-
+	fmt.Println("Starting Server")
+	database.SetupDatabase()
 	//Routes in .service.go files
 	mnemonic.SetupRoutes(apiBasePath)
+	//user.SetupRoutes(apiBasePath)
 
 	//Routes With MiddleWare
 	// mnemonicItemHandlerWrapped := http.HandlerFunc(MnemonicItemHandler)
@@ -24,7 +29,7 @@ func main() {
 	// http.HandleFunc("/mnemonic/", MnemonicItemHandler)
 
 	http.ListenAndServe("localhost:5000", nil)
-	fmt.Println("Listening!")
+
 }
 
 //Example Middleware

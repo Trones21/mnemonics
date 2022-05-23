@@ -12,27 +12,35 @@ import (
 func SetupRoutes(apiBasePath string) {
 	handleMnemonics := http.HandlerFunc(MnemonicListHandler)
 	handleMnemonic := http.HandlerFunc(MnemonicItemHandler)
-	http.Handle(fmt.Sprintf("[%s]/mnemonics", apiBasePath), cors.Middleware(handleMnemonics))
-	http.Handle(fmt.Sprintf("[%s]/mnemonics/", apiBasePath), cors.Middleware(handleMnemonic))
+	http.Handle(fmt.Sprintf("%s/mnemonicsList", apiBasePath), handleMnemonics)
+	http.Handle(fmt.Sprintf("%s/mnemonics/", apiBasePath), cors.Middleware(handleMnemonic))
 }
 
 func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 	urlPathSegments := strings.Split(r.URL.Path, "mnemonics/")
 	mnemonicID := urlPathSegments[len(urlPathSegments)-1]
-	mnemonic := getMnemonic(mnemonicID)
-
-	if mnemonic == nil {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Println(mnemonicID)
-		w.Write([]byte("Object not found"))
-		return
-	}
 
 	switch r.Method {
 	case http.MethodGet:
+		fmt.Println("Get Item")
+		mnemonic, err := getMnemonic(mnemonicID)
+		if mnemonic == nil {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte("Not found"))
+			return
+		}
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			//Follow this guide to send specific info in debug, while responding with
+			//vague info for prod (to prevent consumers from understaning internal)
+			//http://speakmy.name/2014/07/29/http-request-debugging-in-go/
+			w.Write([]byte("err"))
+		}
+
 		mnemonicJSON, err := json.Marshal(mnemonic)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Error parsing JSON in service file"))
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
@@ -57,13 +65,13 @@ func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		addOrUpdateMnenomic(updatedMnemonic)
+		addOrUpdateMnenomic(&updatedMnemonic)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Successfully updated mnemonic"))
 		return
 
 	case http.MethodDelete:
-		removeMnemonic(mnemonicID)
+		//removeMnemonic(mnemonicID)
 
 	case http.MethodOptions:
 		return
@@ -78,15 +86,22 @@ func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 func MnemonicListHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		mnemonicsList := getMnemonicList()
+		mnemonicsList, err := getMnemonicList()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(fmt.Sprintf("%s", err)))
+			return
+		}
 		mnemonicsJSON, err := json.Marshal(mnemonicsList)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Error parsing JSON"))
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(mnemonicsJSON)
-	case http.MethodPost:
+		return
+		// case http.MethodPost:
 		//add a new mnemonic
 		var newMnemonic Mnemonic
 		bodyBytes, err := ioutil.ReadAll(r.Body)
@@ -101,13 +116,9 @@ func MnemonicListHandler(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("body", err.Error())
 			return
 		}
-		existingMnem := getMnemonic(newMnemonic.MnemonicID)
-		if newMnemonic.MnemonicID != 0 {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte("You cannot set an ID from the frontend"))
-			return
-		}
-		_, err = addOrUpdateMnenomic(newMnemonic)
+		//existingMnem := getMnemonic(newMnemonic.MnemonicID)
+
+		//_, err = addOrUpdateMnenomic(newMnemonic)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
