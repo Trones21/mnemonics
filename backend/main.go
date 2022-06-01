@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"mnemonics/database"
 	"mnemonics/mnemonic"
+	"mnemonics/user"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -16,8 +17,11 @@ func main() {
 	database.SetupDatabase()
 	//Routes in .service.go files
 	mnemonic.SetupRoutes(apiBasePath)
-	//user.SetupRoutes(apiBasePath)
-
+	user.SetupRoutes(apiBasePath)
+	http.HandleFunc("/stats", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Stats page to be built"))
+		return
+	})
 	//Routes With MiddleWare
 	// mnemonicItemHandlerWrapped := http.HandlerFunc(MnemonicItemHandler)
 	// mnemonicListHandlerWrapped := http.HandlerFunc(MnemonicListHandler)

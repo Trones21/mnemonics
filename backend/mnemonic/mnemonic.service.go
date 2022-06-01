@@ -13,17 +13,17 @@ func SetupRoutes(apiBasePath string) {
 	handleMnemonics := http.HandlerFunc(MnemonicListHandler)
 	handleMnemonic := http.HandlerFunc(MnemonicItemHandler)
 	http.Handle(fmt.Sprintf("%s/mnemonicsList", apiBasePath), handleMnemonics)
-	http.Handle(fmt.Sprintf("%s/mnemonics/", apiBasePath), cors.Middleware(handleMnemonic))
+	http.Handle(fmt.Sprintf("%s/mnemonic/", apiBasePath), cors.Middleware(handleMnemonic))
 }
 
 func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
-	urlPathSegments := strings.Split(r.URL.Path, "mnemonics/")
+	urlPathSegments := strings.Split(r.URL.Path, "mnemonic/")
 	mnemonicID := urlPathSegments[len(urlPathSegments)-1]
 
 	switch r.Method {
 	case http.MethodGet:
 		fmt.Println("Get Item")
-		mnemonic, err := getMnemonic(mnemonicID)
+		mnemonic, err := GetMnemonic(mnemonicID)
 		if mnemonic == nil {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte("Not found"))
@@ -32,7 +32,7 @@ func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			//Follow this guide to send specific info in debug, while responding with
-			//vague info for prod (to prevent consumers from understaning internal)
+			//vague info for prod (to prevent consumers from understanding internals)
 			//http://speakmy.name/2014/07/29/http-request-debugging-in-go/
 			w.Write([]byte("err"))
 		}
@@ -45,8 +45,7 @@ func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(mnemonicJSON)
-
-	case http.MethodPost:
+	case http.MethodPut:
 		var updatedMnemonic Mnemonic
 		bodyBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -65,17 +64,37 @@ func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		addOrUpdateMnenomic(&updatedMnemonic)
+		UpdateMnenomic(updatedMnemonic)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Successfully updated mnemonic"))
 		return
+	case http.MethodPost:
+		var newMnemonic Mnemonic
+		bodyBytes, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
 
+		err = json.Unmarshal(bodyBytes, &newMnemonic)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		if newMnemonic.MnemonicID != mnemonicID {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		AddMnenomic(newMnemonic)
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Successfully created mnemonic"))
+		return
 	case http.MethodDelete:
-		//removeMnemonic(mnemonicID)
-
+		DeleteMnemonic(mnemonicID)
 	case http.MethodOptions:
 		return
-
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
@@ -86,7 +105,7 @@ func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 func MnemonicListHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		mnemonicsList, err := getMnemonicList()
+		mnemonicsList, err := GetMnemonicList()
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(fmt.Sprintf("%s", err)))
@@ -100,31 +119,6 @@ func MnemonicListHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(mnemonicsJSON)
-		return
-		// case http.MethodPost:
-		//add a new mnemonic
-		var newMnemonic Mnemonic
-		bodyBytes, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Header().Set("body", err.Error())
-			return
-		}
-		err = json.Unmarshal(bodyBytes, &newMnemonic)
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Header().Set("body", err.Error())
-			return
-		}
-		//existingMnem := getMnemonic(newMnemonic.MnemonicID)
-
-		//_, err = addOrUpdateMnenomic(newMnemonic)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		w.WriteHeader(http.StatusCreated)
 		return
 	case http.MethodOptions:
 		return

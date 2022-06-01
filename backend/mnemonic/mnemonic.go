@@ -11,3 +11,5 @@ type Mnemonic struct {
 	//SrcLink        string //Could make a new table later to add multiple
 	//Tags         //DB Note - this is a M:M relationship - Need a tags table and a map table
 }
+
+//Add Getters and Setters?

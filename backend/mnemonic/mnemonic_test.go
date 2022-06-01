@@ -3,27 +3,16 @@ package mnemonic_test
 import (
 	"encoding/json"
 	"fmt"
-	"log"
-	"sync"
+	"mnemonics/mnemonic"
 	"testing"
 )
 
 func Test_getMnemonic(t *testing.T) {
 	//Arrange
-	var MnemonicMap = struct {
-		sync.RWMutex
-		m map[int]Mnemonic
-	}{m: make(map[int]Mnemonic)}
+	//Connect to DB
 
-	fmt.Println("loading mnemonics")
-	memMap, err := loadMnemonicMap()
-	MnemonicMap.m = memMap
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Mnemonics Loaded")
 	//Act
-	actual := getMnemonic(2)
+	actual, err := mnemonic.GetMnemonic("<ID>")
 
 	//Assert
 	jsonOBJ, err := json.Marshal(actual)
