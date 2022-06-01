@@ -82,12 +82,13 @@ func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if newMnemonic.MnemonicID != mnemonicID {
-			w.WriteHeader(http.StatusBadRequest)
+		rowsCreated, err := AddMnenomic(newMnemonic)
+		if rowsCreated != 1 {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		AddMnenomic(newMnemonic)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Successfully created mnemonic"))
 		return

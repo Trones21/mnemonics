@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"mnemonics/database"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -70,20 +71,20 @@ func AddMnenomic(mnem Mnemonic) (int, error) {
 	ItemToRemember,
 	ImageID,
 	CreatedByID,
-	CreatedDate
+	CreatedDate)
 	 VALUES (?,?,?,?,?,?)`,
 		mnemid,
 		&mnem.MemoryTip,
 		&mnem.ItemToRemember,
 		&mnem.ImageID,
 		&mnem.CreatedByID,
-		&mnem.CreatedDate)
+		time.Now())
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 	insertID, err := result.LastInsertId()
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 	return int(insertID), nil
 }
