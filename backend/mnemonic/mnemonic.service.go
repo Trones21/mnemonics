@@ -45,8 +45,10 @@ func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(mnemonicJSON)
+
 	case http.MethodPut:
 		var updatedMnemonic Mnemonic
+		//THis is a candidate for Monad design (or just factor out into it's own function?)
 		bodyBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
@@ -68,6 +70,7 @@ func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Successfully updated mnemonic"))
 		return
+
 	case http.MethodPost:
 		var newMnemonic Mnemonic
 		bodyBytes, err := ioutil.ReadAll(r.Body)
@@ -92,8 +95,14 @@ func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Successfully created mnemonic"))
 		return
+
 	case http.MethodDelete:
-		DeleteMnemonic(mnemonicID)
+		err := DeleteMnemonic(mnemonicID)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		return
 	case http.MethodOptions:
 		return
 	default:

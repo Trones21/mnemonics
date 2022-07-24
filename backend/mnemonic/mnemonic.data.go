@@ -1,15 +1,11 @@
 package mnemonic
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
 	"mnemonics/database"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/google/uuid"
 )
 
@@ -134,18 +130,19 @@ func DeleteMnemonic(MnemonicId string) error {
 	return nil
 }
 
-func dynamoaddOrUpdateMnenomic(svc *dynamodb.Client, Mnem Mnemonic) {
-	out, err := svc.PutItem(context.TODO(), &dynamodb.PutItemInput{
-		TableName: aws.String("Mnemonic"),
-		Item: map[string]types.AttributeValue{
-			"MnemonicID":     &types.AttributeValueMemberS{Value: Mnem.MnemonicID},
-			"ItemtoRemember": &types.AttributeValueMemberS{Value: Mnem.ItemToRemember},
-		},
-	})
+//When switching to DynamoDB, this is the format to use
+// func dynamoaddOrUpdateMnenomic(svc *dynamodb.Client, Mnem Mnemonic) {
+// 	out, err := svc.PutItem(context.TODO(), &dynamodb.PutItemInput{
+// 		TableName: aws.String("Mnemonic"),
+// 		Item: map[string]types.AttributeValue{
+// 			"MnemonicID":     &types.AttributeValueMemberS{Value: Mnem.MnemonicID},
+// 			"ItemtoRemember": &types.AttributeValueMemberS{Value: Mnem.ItemToRemember},
+// 		},
+// 	})
 
-	if err != nil {
-		panic(err)
-	}
+// 	if err != nil {
+// 		panic(err)
+// 	}
 
-	fmt.Println(out.Attributes)
-}
+// 	fmt.Println(out.Attributes)
+// }
