@@ -1,5 +1,7 @@
-Create schema mnemonicsdb;
 
+drop schema mnemonicsdb;
+
+Create schema mnemonicsdb;
 use mnemonicsdb; 
 
 create table mnems (
@@ -32,8 +34,8 @@ create table mnemCollectionMap(
 create table upvoteLog(
     EntityType enum('mnemonic', 'collection') not null,
     actorIsRegistered bool not null,
-    actorID   string null,
-    ipAddress  string null,
+    actorID   varchar(255) null,
+    ipAddress  varchar(255) null,
     Date DateTime not null
 
 );
