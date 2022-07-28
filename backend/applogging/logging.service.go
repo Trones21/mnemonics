@@ -1,8 +1,10 @@
 package applogging
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"mnemonics/mnemonic"
 	"net/http"
 	"strings"
@@ -18,7 +20,7 @@ func SetupRoutes(apiBasePath string) {
 	// })
 
 	http.HandleFunc(fmt.Sprintf("%s/upvotelog", apiBasePath), func(w http.ResponseWriter, r *http.Request) {
-		logInfo, err := GetLoggingInfo(r)
+		logInfo, err := ParseLoggingInfo(r)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte(err.Error()))
@@ -28,20 +30,36 @@ func SetupRoutes(apiBasePath string) {
 		case "mnemonic":
 			mnemonic, err := mnemonic.GetMnemonic(logInfo.EntityID)
 			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(err.Error()))
 				return
 			}
 			if mnemonic == nil {
 				w.WriteHeader(http.StatusNotFound)
-				w.Write([]byte("ID Not found"))
+				w.Write([]byte(fmt.Sprintf("ID not found  - mnemonicID: %s", logInfo.EntityID)))
 				return
 			}
 		case "collection":
-			w.Write([]byte("Collection logging not implemented"))
+			// collection, err := mnemonic.GetCollection(logInfo.EntityID)
+			// if err != nil {
+			// 	w.WriteHeader(http.StatusInternalServerError)
+			// 	w.Write([]byte(err.Error()))
+			// 	return
+			// }
+			// if collection == nil {
+			// 	w.WriteHeader(http.StatusNotFound)
+			// 	w.Write([]byte(fmt.Sprintf("ID not found  - collectionID: %s", logInfo.EntityID)))
+			// 	return
+			// }
 			return
 		default:
 			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte("Entity type & ID must be sent after upvotelog? in the form of <entity>=<id> Entity must be of type mnemonic or collection"))
+			w.Write([]byte(`
+			JSON body must be in the format {
+				actorID: <uuid>
+				...
+			} `,
+			))
 			return
 		}
 	})
@@ -55,9 +73,23 @@ type LoggingInfo struct {
 	IsRegisteredActor bool
 }
 
-//Such a simple operation... splitting strings, why must it be so hard?
-//Monads???
-func GetLoggingInfo(r *http.Request) (*LoggingInfo, error) {
+func ParseLoggingInfo(r *http.Request) (*LoggingInfo, error) {
+	bodyBytes, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return nil, err
+	}
+	logInfoB := &LoggingInfo{}
+	err = json.Unmarshal(bodyBytes, &logInfoB)
+	if err != nil {
+		return nil, err
+	}
+	//Check for required properties?
+
+	return logInfoB, nil
+
+}
+
+func ParsingQueryString(r *http.Request) (*LoggingInfo, error) {
 	logInfo := &LoggingInfo{}
 	if strings.Contains(r.URL.RawQuery, "=") && utf8.RuneCountInString(r.URL.RawQuery) >= 3 {
 		logInfo.EntityType = strings.Split(r.URL.RawQuery, "=")[0]
@@ -67,15 +99,4 @@ func GetLoggingInfo(r *http.Request) (*LoggingInfo, error) {
 		err := errors.New("raw query missing = or is too short")
 		return nil, err
 	}
-
-	// 	if strings.Contains(r.URL.RawQuery, "=") {
-	// 	queryParts := strings.Split(r.URL.RawQuery, "=")
-	// 	if len(queryParts) < 2 {
-
-	// 	}
-	// }
-	//actorIsRegistered
-	//userInfo
-	//IP address
-
 }
