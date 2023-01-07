@@ -15,4 +15,4 @@
 # vendor/
 
 #Sensitive Files
-database/database.go
+/database/database.go
