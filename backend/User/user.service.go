@@ -17,25 +17,29 @@ func SetupRoutes(apiBasePath string) {
 }
 
 func userHandler(w http.ResponseWriter, r *http.Request) {
-	urlPathSegments := strings.Split(r.URL.Path, "user/")
+	//Temporary method for POST & PUT to get the userid
 	//ToDo: Fix this so that the authorization handle security, right now this is WIDE OPEN, anyone can update a user
+	urlPathSegments := strings.Split(r.URL.Path, "user/")
 	loggedInuserID := urlPathSegments[len(urlPathSegments)-1]
 
 	switch r.Method {
 	case http.MethodGet:
-		fmt.Println("Get Item")
-		user, err := getuser(loggedInuserID)
-		if user == nil {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("Not found"))
-			return
-		}
+		fmt.Printf("Get User - %s", urlPathSegments[len(urlPathSegments)-1])
+		user, err := getUser(urlPathSegments[len(urlPathSegments)-1])
+
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			//Follow this guide to send specific info in debug, while responding with
 			//vague info for prod (to prevent consumers from understandinginternals)
 			//http://speakmy.name/014/07/29/http-request-debugging-in-go/
-			w.Write([]byte("err"))
+			w.Write([]byte(err.Error()))
+			return
+		}
+
+		if user == nil {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte("Not found"))
+			return
 		}
 
 		userJSON, err := json.Marshal(user)
@@ -51,36 +55,52 @@ func userHandler(w http.ResponseWriter, r *http.Request) {
 		var newUser User
 		bodyBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 		err = json.Unmarshal(bodyBytes, &newUser)
 		if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		w.Write([]byte("Need to add logic for adding user"))
-		return 
+		err = addUser(&newUser)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(fmt.Sprintf("User added to DB: %s", newUser.NickName)))
+		return
+
 	case http.MethodPut:
 		var updateduser User
 		bodyBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("Error Reading JSON"))
 			return
 		}
 
 		err = json.Unmarshal(bodyBytes, &updateduser)
 		if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("Error Unmarshalling JSON"))
 			return
 		}
 
 		if updateduser.UserID != loggedInuserID {
-		w.WriteHeader(http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(fmt.Sprintf("Cannot update this user --- UsertoUpdate: %s , loggedinUser: %s", updateduser.UserID, loggedInuserID)))
 			return
 		}
 
-		updateUser(&updateduser)
+		err = updateUser(&updateduser)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			return
+		}
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Succesfully updated user"))
 		return
@@ -94,7 +114,7 @@ func userHandler(w http.ResponseWriter, r *http.Request) {
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
-}
+	}
 
 }
 

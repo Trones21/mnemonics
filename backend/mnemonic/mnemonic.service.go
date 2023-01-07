@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"mnemonics/cors"
 	"net/http"
 	"strings"
 )
@@ -13,7 +12,7 @@ func SetupRoutes(apiBasePath string) {
 	handleMnemonics := http.HandlerFunc(MnemonicListHandler)
 	handleMnemonic := http.HandlerFunc(MnemonicItemHandler)
 	http.Handle(fmt.Sprintf("%s/mnemonicsList", apiBasePath), handleMnemonics)
-	http.Handle(fmt.Sprintf("%s/mnemonic/", apiBasePath), cors.Middleware(handleMnemonic))
+	http.Handle(fmt.Sprintf("%s/mnemonic/", apiBasePath), handleMnemonic) //cors.Middleware(handleMnemonic))
 }
 
 func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {

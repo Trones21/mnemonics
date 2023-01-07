@@ -4,17 +4,27 @@ import (
 	"database/sql"
 	"fmt"
 	"mnemonics/database"
+	"time"
+
+	"github.com/google/uuid"
 )
 
-func getuser(userID string) (*User, error) {
+func getUser(userID string) (*User, error) {
 	row := database.DbConn.QueryRow(`Select 
-	userID,
+	UserID,
 	NickName,
 	DateJoined,
+	EmailAddress,
 	MnemonicCount
-	from user where userID = ?`, userID)
+	from user where UserID = ?`, userID)
 	user := &User{}
-	err := row.Scan()
+	err := row.Scan(
+		&user.UserID,
+		&user.NickName,
+		&user.DateJoined,
+		&user.EmailAddress,
+		&user.MnemonicCount,
+	)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {
@@ -46,10 +56,46 @@ func getuserList() ([]User, error) {
 
 }
 
-func addUser(user *User) {
+func addUser(user *User) error {
+	var err error
+	_, err = database.DbConn.Exec(`INSERT INTO user 
+	(
+	UserID,
+	NickName,
+	DateJoined,
+	EmailAddress,
+	MnemonicCount
+	)
+	 VALUES (?,?,?,?,?)`,
+		uuid.NewString(),
+		user.NickName,
+		time.Now(),
+		user.EmailAddress,
+		0,
+	)
 
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func updateUser(user *User) {
-
+// Note: User.service.go checks that loggedin UserID = UserID from json body, therefore
+// ensuring only the loggedin user can update their profile (nobody else can)
+func updateUser(user *User) error {
+	var err error
+	_, err = database.DbConn.Exec(`
+	update user
+	set NickName = ? ,
+	EmailAddress = ?  
+	where UserID = ?;
+	`,
+		user.NickName,
+		user.EmailAddress,
+		user.UserID,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
 }
