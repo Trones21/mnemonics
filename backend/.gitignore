@@ -15,4 +15,5 @@
 # vendor/
 
 #Sensitive Files
-/database/database.go
+/database/database_actual.go
+

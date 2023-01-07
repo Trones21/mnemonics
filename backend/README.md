@@ -1,7 +1,7 @@
 # mnemonics
 
 Notes:
-database.go password needs to be replaced with actual pwd or future: abstracted to another file 
+Copy database_template.txt as database_actual.go -- password needs to be replaced with actual pwd
 
 Endpoint Status:
 
