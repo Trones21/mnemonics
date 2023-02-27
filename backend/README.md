@@ -3,6 +3,9 @@
 Notes:
 Copy database_template.txt as database_actual.go -- password needs to be replaced with actual pwd
 
+ToDo: 
+--Export Postman as yml? yaml? json? etc. to repo
+
 Endpoint Status:
 
 User 

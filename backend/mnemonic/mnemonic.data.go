@@ -60,6 +60,10 @@ func GetMnemonicList() ([]Mnemonic, error) {
 
 func AddMnenomic(mnem Mnemonic) (int, error) {
 	mnemid := uuid.NewString()
+
+	//Not null/empty check (MySql is writing empty strings)
+	//if  strings.TrimSpace(mnem.MemoryTip)
+
 	mnem = GetForeignKeys(mnem)
 	result, err := database.DbConn.Exec(`INSERT INTO mnems 
 	(MnemonicID,

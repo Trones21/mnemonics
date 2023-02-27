@@ -71,25 +71,42 @@ func MnemonicItemHandler(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case http.MethodPost:
+		fmt.Println("Post Mnemonic")
 		var newMnemonic Mnemonic
 		bodyBytes, err := ioutil.ReadAll(r.Body)
 		if err != nil {
+			w.Write([]byte("Error Reading Body"))
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
 		err = json.Unmarshal(bodyBytes, &newMnemonic)
 		if err != nil {
+			w.Write([]byte(err.Error()))
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
 		rowsCreated, err := AddMnenomic(newMnemonic)
-		if rowsCreated != 1 {
-			fmt.Println(err)
+		if err != nil {
+			res, _ := json.Marshal(newMnemonic)
+			w.Write([]byte(err.Error()))
+			w.Write([]byte("\n Verify property names in request object match unmarshhalled object  \n"))
+			w.Write([]byte("\n Request Bytes: \n"))
+			w.Write(bodyBytes)
+			w.Write([]byte("\n Unmarshalled Object: \n"))
+			w.Write([]byte(res))
+
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		fmt.Println(rowsCreated)
+		//This is actually 0
+		// if rowsCreated != 1 {
+		// 	fmt.Println(err)
+		// 	w.WriteHeader(http.StatusInternalServerError)
+		// 	return
+		// }
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Successfully created mnemonic"))

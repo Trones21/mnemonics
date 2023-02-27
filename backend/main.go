@@ -22,6 +22,8 @@ func main() {
 		w.Write([]byte("Stats page to be built"))
 		return
 	})
+
+	//Examples
 	//Routes With MiddleWare
 	// mnemonicItemHandlerWrapped := http.HandlerFunc(MnemonicItemHandler)
 	// mnemonicListHandlerWrapped := http.HandlerFunc(MnemonicListHandler)
@@ -36,7 +38,7 @@ func main() {
 
 }
 
-//Example Middleware
+// Example Middleware
 func middlewareHandler(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("before handler")

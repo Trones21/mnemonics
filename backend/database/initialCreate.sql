@@ -7,7 +7,8 @@ create table mnems (
     ItemToRemember varchar(255) not null,
     ImageID varchar(255),
     CreatedByID varchar(255) not null,
-    CreatedDate DateTime not null
+    CreatedDate DateTime not null,
+    Constraint CHK_MemoryTip_Length CHECK (char_length(trim(MemoryTip)) < 0)
 );
 create table user (
     UserID varchar(255) not null primary key,
