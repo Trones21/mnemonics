@@ -1,0 +1,7 @@
+{
+  "name": "mnemonics-ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
