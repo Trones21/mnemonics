@@ -7,12 +7,36 @@
   </ion-header>
   
   <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
-      <ion-toolbar>
-        <ion-title size="large">Collections ion title</ion-title>
-      </ion-toolbar>
-    </ion-header>
-  
-    ...collection groups....
+    <ion-card>
+      <ion-button href="collections/new">New</ion-button>
+      <ion-button href="collections/filter?userId={{loggedInUserID}}">My Collections</ion-button>
+    </ion-card>
+    <ion-card>
+      <ion-button (click)="showSearch()">Search</ion-button>
+      <ion-button (click)="showBrowse()">Browse</ion-button>
+    </ion-card>
+    <div [ngSwitch]="view">
+      <div *ngSwitchCase="'Search'">
+        <ion-searchbar placeholder="Search for a Collection"
+        [debounce]="1000"
+        (ionChange)="Search($event)"
+        ></ion-searchbar>
+      </div>
+      <div *ngSwitchCase="'Browse'">
+        <ion-title>Categories</ion-title>
+        <ion-list>
+          <!-- I want this to be the endpoint for the rest api but not necessarily the route... it can be, but I need to watch a course to remember how that should work 
+            collections/filter?category={{category.id}} 
+          Same thing for "My collections above"-->
+          <ion-item  
+          *ngFor="let category of categories"
+          href="">
+            <ion-label>{{category.name}}</ion-label>
+            <p slot="end">{{category.collections}}</p>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+
   </ion-content>
   

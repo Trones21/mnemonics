@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { CategoryPage } from '../category/category.page';
+import { CollectionCard } from '../components/collectionCard';
+import { MnemonicCard } from '../components/mnemonicCard';
+import { SingleCollectionPage } from '../collections/singleCollection.page';
 
 const routes: Routes = [
   {
@@ -12,6 +16,11 @@ const routes: Routes = [
         loadChildren: () => import('../swiper/swiper.module').then(m => m.SwiperPageModule)
       },
       {
+        path: 'editor',
+        loadChildren: () => import('../editor/editor.module').then(m => m.EditorPageModule)
+      },
+      
+      {
         path: 'collections',
         loadChildren: () => import('../collections/collections.module').then(m => m.CollectionsPageModule)
       },
@@ -19,9 +28,15 @@ const routes: Routes = [
         path: 'profile',
         loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
       },
+
+      //Place components here to see them in isolation
+      {
+        path: 'test',
+        component: SingleCollectionPage
+      },
       {
         path: '',
-        redirectTo: '/swiper',  //Basically which tab show be selected when first loading / empty path
+        redirectTo: '/collections',  //Basically which tab show be selected when first loading / empty path
         pathMatch: 'full'
       }
     ]

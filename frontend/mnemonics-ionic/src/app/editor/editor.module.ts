@@ -2,10 +2,10 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CollectionsPage } from './collections.page';
+import { EditorPage } from './editor.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
-import { CollectionsPageRoutingModule } from './collections-routing.module';
+import {EditorPageRoutingModule} from './editor-routing.module'
 
 @NgModule({
   imports: [
@@ -14,10 +14,8 @@ import { CollectionsPageRoutingModule } from './collections-routing.module';
     FormsModule,
     ReactiveFormsModule,
     ExploreContainerComponentModule,
-    CollectionsPageRoutingModule
+    EditorPageRoutingModule
   ],
-  declarations: [CollectionsPage]
+  declarations: [EditorPage]
 })
-export class CollectionsPageModule {
-  
-}
+export class EditorPageModule {}

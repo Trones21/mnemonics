@@ -1,17 +1,46 @@
 <ion-header [translucent]="true">
-    <ion-toolbar>
-      <ion-title>
-        Profile
-      </ion-title>
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
-      <ion-toolbar>
-        <ion-title size="large">Profile</ion-title>
-      </ion-toolbar>
-    </ion-header>
-  ...Profile Here...
-    <app-explore-container name="Explore UI Component"></app-explore-container>
-  </ion-content>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <div *ngIf="myUserId === profile.userID; then thenBlock else elseBlock"></div>
+      <ng-template #thenBlock>
+        <ion-title>My Profile</ion-title>
+      </ng-template>
+      <ng-template #elseBlock>
+        <ion-title>{{profile.username}}'s Profile</ion-title>
+      </ng-template>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ng-template [ngIf]="myUserId === profile.userID">
+          <ion-icon name="pencil-sharp"></ion-icon>
+        </ng-template>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card color="secondary">
+    <ion-card-header>
+      <ion-avatar>
+        <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+      </ion-avatar>
+      <ion-card-title>Sample Title</ion-card-title>
+      <ion-card-subtitle>Sample Subtitle</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      Sample Content -- ToUpdate: See wireframe
+    </ion-card-content>
+  </ion-card>
+
+  <ion-title>Collections Created By {{profile.username}}</ion-title>
+  <div *ngFor="let col of profile.myCollections">
+    <app-collectionCard [collectionInfo]=col></app-collectionCard>
+  </div>
+  <ion-title>Collections Favorited by {{profile.username}}</ion-title>
+  <div *ngFor="let col of profile.favoritedCollections">
+    <app-collectionCard [collectionInfo]=col></app-collectionCard>
+  </div>
+</ion-content>

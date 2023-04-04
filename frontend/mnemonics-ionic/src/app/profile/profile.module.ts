@@ -6,6 +6,7 @@ import { ProfilePage } from './profile.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { ProfilePageRoutingModule } from './profile-routing.module';
+import { CollectionCard } from '../components/collectionCard';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { ProfilePageRoutingModule } from './profile-routing.module';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    ProfilePageRoutingModule
+    ProfilePageRoutingModule,
+    CollectionCard
   ],
   declarations: [ProfilePage]
 })

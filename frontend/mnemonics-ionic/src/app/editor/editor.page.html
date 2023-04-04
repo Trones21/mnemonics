@@ -1,0 +1,35 @@
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="clearForm()">Clear</ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button type="submit" form="myForm">ToDo: Fix Validation -- Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form" id="myForm"  (ngSubmit)="save()">
+    <ion-input 
+    formControlName="name"
+    label="Mnemonic Name" label-placement="floating" fill="outline" placeholder="ex. PEMDAS"></ion-input>
+
+    <ion-textarea class="ion-margin-vertical" 
+    formControlName="hint"
+    label="Memory Device" label-placement="floating" fill="outline"
+      placeholder="ex. PEMDAS - Please Excuse My Dear Aunt Sally" [autoGrow]="true" required="true" value="">
+    </ion-textarea>
+
+    <ion-textarea label="Answer" 
+    formControlName="answer"
+    label-placement="floating" fill="outline"
+      placeholder="ex. PEMDAS - Parentheses, Exponents, Multiplication/Division (Left to Right), Addition/Subtraction (Left to Right)"
+      [autoGrow]="true" required="true" value="">
+    </ion-textarea>
+  </form>
+  <ion-toast trigger="open-toast" message="This toast will disappear after 5 seconds" [duration]="5000"></ion-toast>
+</ion-content>
+
