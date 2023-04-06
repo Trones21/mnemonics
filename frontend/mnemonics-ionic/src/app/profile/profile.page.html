@@ -40,7 +40,7 @@
     <app-collectionCard [collectionInfo]=col></app-collectionCard>
   </div>
   <ion-title>Collections Favorited by {{profile.username}}</ion-title>
-  <div *ngFor="let col of profile.favoritedCollections">
-    <app-collectionCard [collectionInfo]=col></app-collectionCard>
+  <div *ngFor="let collection of profile.favoritedCollections">
+    <app-collectionCard [collectionInfo]=collection></app-collectionCard>
   </div>
 </ion-content>

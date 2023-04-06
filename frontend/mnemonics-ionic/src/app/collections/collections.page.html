@@ -23,20 +23,34 @@
         ></ion-searchbar>
       </div>
       <div *ngSwitchCase="'Browse'">
-        <ion-title>Categories</ion-title>
-        <ion-list>
-          <!-- I want this to be the endpoint for the rest api but not necessarily the route... it can be, but I need to watch a course to remember how that should work 
-            collections/filter?category={{category.id}} 
-          Same thing for "My collections above"-->
-          <ion-item  
-          *ngFor="let category of categories"
-          href="">
-            <ion-label>{{category.name}}</ion-label>
-            <p slot="end">{{category.collections}}</p>
-          </ion-item>
-        </ion-list>
+        <div [ngSwitch]="selectedCategoryView">
+          
+          <div *ngSwitchCase="false">
+            <ion-toolbar>
+              <ion-title>
+                Categories
+              </ion-title>
+            </ion-toolbar>
+            <ion-list>
+              <ion-item (click)="selectCategory(category.id)"
+              *ngFor="let category of categories">
+                <ion-label>{{category.name}}</ion-label>
+                <p slot="end">{{category.collectionCount}}</p>
+              </ion-item>
+            </ion-list>
+          </div>
+          <div *ngSwitchCase="true">
+            <ion-toolbar>
+              <ion-icon slot="start" name="arrow-back" (click)="selectedCategoryView = false"></ion-icon>
+              <ion-title>
+                Category: {{selectedCategory?.name}} 
+              </ion-title>
+            </ion-toolbar>
+            <app-collectionCard *ngFor="let collection of selectedCategory?.collectionCards" [collectionInfo]="collection"></app-collectionCard>
+          </div>
       </div>
     </div>
+  </div>
 
   </ion-content>
   

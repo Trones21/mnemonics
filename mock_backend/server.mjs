@@ -7,6 +7,8 @@
 import mnemonic from  './data/mnemonic.mjs'
 import profile from  './data/profile.mjs'
 import collection from  './data/collection.mjs'
+import category from  './data/category.mjs'
+import categories from  './data/categories.mjs'
 import express from 'express'
 import cors from 'cors'
 const app = express()
@@ -17,16 +19,13 @@ app.use(express.json())
 
 app.options('/*', cors())
 
+//Working
+//Note: This is a catch-all, i will have different endpoints for different entities
 app.post('/*', cors(), function(req, res){
-  console.log('asdasdsa')
   console.log(req.body)
   //let x = JSON.parse(req.body)
   //console.log(x)
   res.json({"ReceivedObject":true})
-})
-
-app.get('/mnemonic/:id', function (req, res) {
-  res.json(mnemonic);
 })
 
 app.get('/profile/:id', function (req, res) {
@@ -35,8 +34,30 @@ app.get('/profile/:id', function (req, res) {
   res.json(profile);
 })
 
+app.get('/categories/', cors(), function (req, res) {
+  res.json(categories);
+})
+app.get('/category/:id', cors(), function (req, res) {
+  console.log('send res', category)
+  res.json(category);
+
+})
+
+
+//To Test
+app.get('/mnemonics?filter=:filterLogic', cors(), function (req, res) {
+  
+  //res.json(mnemonics);
+})
+
 app.get('/collection/:id', function (req, res) {
   res.json(collection);
+})
+
+app.get('/collections?categoryId=:id', cors(), function (req, res) {
+  //Planned architecture categoryId is an attribute of the collection -- you cannot put a collection in multiple categories
+  
+  //res.json(collections);
 })
 
 
