@@ -12,7 +12,7 @@ export class CollectionsPage {
     {id:4,name:'Biology', collections:1},
     {id:5,name:'Body Language', collections:0}
 ]
-  loggedInUserID = '123'
+  loggedInUserID = localStorage.getItem('loggedInUserId')
   view: string = 'Search'
   constructor() {}
 

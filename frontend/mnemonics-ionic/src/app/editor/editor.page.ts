@@ -1,5 +1,6 @@
 import { Component, Input ,OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MnemonicService } from '../mnemonic/mnemonic.service';
 
 
 
@@ -28,7 +29,7 @@ export class EditorPage {
   
   form: FormGroup;
 
-  constructor(private fb: FormBuilder){
+  constructor(private fb: FormBuilder, private mnemonicService: MnemonicService){
     this.form = this.fb.group({
       name: '',
       hint: '',
@@ -37,9 +38,10 @@ export class EditorPage {
   }
 
   save(){
-    console.log(this.form.value)
-    
-    //this.form.reset()
+
+    //console.log(this.form.value)
+    this.mnemonicService.createMnemonic(this.form.value)
+    this.form.reset()
   }
 
   clearForm(){

@@ -7,6 +7,7 @@ import { ExploreContainerComponentModule } from '../explore-container/explore-co
 
 import { ProfilePageRoutingModule } from './profile-routing.module';
 import { CollectionCard } from '../components/collectionCard';
+import { HttpClient } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { CollectionCard } from '../components/collectionCard';
     ProfilePageRoutingModule,
     CollectionCard
   ],
+  providers:[HttpClient],
   declarations: [ProfilePage]
 })
 export class ProfilePageModule {}

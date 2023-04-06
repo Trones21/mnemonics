@@ -1,10 +1,14 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, ActivatedRoute } from '@angular/router';
 import { TabsPage } from './tabs.page';
 import { CategoryPage } from '../category/category.page';
 import { CollectionCard } from '../components/collectionCard';
 import { MnemonicCard } from '../components/mnemonicCard';
 import { SingleCollectionPage } from '../collections/singleCollection.page';
+import { ProfilePage } from '../profile/profile.page';
+import { ProfileService } from '../profile/profile.service';
+import { DataService } from '../data.service';
+
 
 const routes: Routes = [
   {
