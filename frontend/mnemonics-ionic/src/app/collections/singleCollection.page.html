@@ -12,5 +12,14 @@
         <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{collection.name}}</ion-title>
+    <ion-title>{{this.collection.name}}</ion-title>
   </ion-toolbar>
+
+<ion-content [fullscreen]="true">
+  <app-mnemonicCard *ngFor="let m of this.collection.mnemonics"
+  name={{m.name}}
+  views={{m.views}}
+
+  ></app-mnemonicCard>
+</ion-content>
+ 

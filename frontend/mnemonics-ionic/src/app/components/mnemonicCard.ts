@@ -1,39 +1,41 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
+import { Component, Inject, Injectable, Input } from "@angular/core";
 import { IonicModule } from '@ionic/angular';
 import { IonDatetime } from "@ionic/angular";
+import { MnemonicService } from "../mnemonic/mnemonic.service";
 
 
 
-export class Mnemonic{
-    link: string
-    name: string
-    stars: number
-    views: number
-    globalViewRank: number
-    globalStarRank: number
-    //Collection Ranks must be computed client side (due to planned db schema -- a single mnemonic can be in many collections,
-    //& I dont plan to keep track of collection level ranks in DB)
-    collectionViewRank?: number
-    collectionStarRank?: number
-    constructor(
-        link: string, 
-        name: string, 
-        stars: number,
-        views: number,
-        globalViewRank:number,
-        globalStarRank: number){
+//Collection Ranks must be computed client side (due to planned db schema -- a single mnemonic can be in many collections,
+//& I dont plan to keep track of collection level ranks in DB)
+
+// @Injectable()
+// export class Mnemonic{
+//     link: String
+//     name: String
+//     stars: Number
+//     views: Number
+//     globalViewRank: Number
+//     globalStarRank: Number
+//     collectionViewRank?: Number
+//     collectionStarRank?: Number
+//     constructor(
+//         link: String, 
+//         name: String, 
+//         stars: Number,
+//         views: Number,
+//         globalViewRank:Number,
+//         globalStarRank: Number){
         
-        this.link = link
-        this.name = name
-        this.stars = stars
-        this.views = views
-        this.globalViewRank = globalViewRank
-        this.globalStarRank = globalStarRank
-    }
+//         this.link = link
+//         this.name = name
+//         this.stars = stars
+//         this.views = views
+//         this.globalViewRank = globalViewRank
+//         this.globalStarRank = globalStarRank
+//     }
 
-}
-
+// }
 
 @Component({
     selector:'app-mnemonicCard',
@@ -45,9 +47,28 @@ export class Mnemonic{
     ]
 })
 export class MnemonicCard {
-    @Input() mnemonic: Mnemonic = new Mnemonic('/', 'Mnemonic Name', 0, 0, 47, 52)
-    constructor(){}
-
-
-
+    @Input() name: String = '';
+    @Input() views: Number = 0;
 }
+
+export interface Mnemonic{
+    link: String
+    name: String
+    stars: Number
+    views: Number
+    globalViewRank: Number
+    globalStarRank: Number
+    collectionViewRank?: Number
+    collectionStarRank?: Number
+}
+
+
+// export class MnemonicCard {
+//     mnemonic: Mnemonic | null = null;
+//     constructor(){
+//     }
+//     ngOnInit(mnemonic: Mnemonic){
+//         this.mnemonic = mnemonic;
+//     }
+// }
+

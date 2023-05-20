@@ -43,19 +43,19 @@ app.get('/category/:id', cors(), function (req, res) {
 
 })
 
-
 //To Test
 app.get('/mnemonics?filter=:filterLogic', cors(), function (req, res) {
   
   //res.json(mnemonics);
 })
 
-app.get('/collection/:id', function (req, res) {
+app.get('/collection/:id', cors(), function (req, res) {
+  console.log('sample collection')
   res.json(collection);
 })
 
-app.get('/collections?categoryId=:id', cors(), function (req, res) {
-  //Planned architecture categoryId is an attribute of the collection -- you cannot put a collection in multiple categories
+app.get('/collections?categoryId=', cors(), function (req, res) {
+  
   
   //res.json(collections);
 })

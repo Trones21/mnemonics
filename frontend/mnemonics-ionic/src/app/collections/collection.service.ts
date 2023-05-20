@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data.service';
+import { CollectionInfo } from '../components/collectionCard';
+import { Collection } from './singleCollection.page';
 
 //ToDo Next: Begin creating entity services to inject data into pages/components 
 @Injectable({
@@ -14,18 +16,17 @@ export class CollectionService {
   async getCollectionsInCategory(categoryId: string){
     let res = await fetch(`${this.baseUrl}/collections?categoryId=${categoryId}`)
     let obj = await res.json();
-    console.log(obj.child)
-    return obj.child;
+    console.log(obj)
+    return obj;
   }
 
 
-  // async getCollectionByID(collectionId: string){
-  //   let res = await fetch(`${this.baseUrl}/collections/`)
-  //   //this should also return the full details of all the mnemonics, ...but a collection could have like 100 mnemonics 
-  //   let obj = await res.json();
-  //   console.log(obj.child)
-  //   return obj.child;
-  // }
+  async getCollectionByID(collectionId: string, includeMnemonicDetails: boolean): Promise<Collection>{
+      let res = await fetch(`${this.baseUrl}/collection/${collectionId}?includeMnemonicDetails=${includeMnemonicDetails}`)
+      let obj = await res.json();
+      let collection = (obj.collection as Collection);
+      return collection
+  }
 
 
 

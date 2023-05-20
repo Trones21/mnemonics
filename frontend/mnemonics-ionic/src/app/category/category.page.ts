@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core"
 import { CategoriesService } from "./categories.service"
 import { CollectionService } from "../collections/collection.service"
-import {CollectionCard} from "../components/collectionCard"
+import { CollectionCard } from "../components/collectionCard"
 import { CollectionInfo } from "../components/collectionCard"
 import { CommonModule, NgFor } from "@angular/common"
 
@@ -9,16 +9,16 @@ import { CommonModule, NgFor } from "@angular/common"
     selector: 'app-category',
     templateUrl: 'category.page.html',
     standalone: true,
-    imports:[
+    imports: [
         CollectionCard,
         CommonModule,
         NgFor
     ]
-  })
+})
 
 //This is currently unused -- switch to it when I switch to routing. 
 //The collections page currently "navigates" to the category page using a switch statements
-export class CategoryPage implements OnInit{
+export class CategoryPage implements OnInit {
     // category = {
     //     name:"Math",
     //     id: 3,
@@ -27,11 +27,14 @@ export class CategoryPage implements OnInit{
     //         {id:'abc', name: 'Geometry'} 
     //     ]
     // }
-    category: CategoryDetails = {id:'', name:'', collectionCount: 0, collectionCards: new Array<CollectionInfo>}
-    constructor(private categoriesService: CategoriesService, private collectionService: CollectionService){
+    category: CategoryDetails = { id: '', name: '', collectionCount: 0, collectionCards: new Array<CollectionInfo> }
+    constructor(
+        private categoriesService: CategoriesService,
+        private collectionService: CollectionService
+    ) {
     }
 
-    ngOnInit(){
+    ngOnInit() {
         // this.categoriesService.getCategoryByID('1').then( c => {
         //         c.collectionCards = new Array<CollectionInfo> 
         //         for(let col of c.collections){
@@ -51,9 +54,9 @@ export class CategoryPage implements OnInit{
 
 }
 
-export interface CategoryDetails{
+export interface CategoryDetails {
     id: string,
     name: string,
     collectionCount: number,
     collectionCards: Array<CollectionInfo>
-  }
+}

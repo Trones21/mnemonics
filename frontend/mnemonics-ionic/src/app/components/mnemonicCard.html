@@ -1,12 +1,12 @@
 <ion-card>
-
-    <ion-icon name="eye">{{mnemonic.views}}</ion-icon>
+  <ion-card-title>{{name}}</ion-card-title>
+    <ion-icon name="eye">{{views}}</ion-icon>
     <ion-icon name="star"></ion-icon>
     <ion-card-content>
         Here's a small text description for the card content. Nothing more, nothing less.
     </ion-card-content>
-<!-- <ion-card-title>{{mnemonic.name}}</ion-card-title> -->
-    <table [style.width]="'100%'">
+  </ion-card>
+    <!-- <table [style.width]="'100%'">
       <tr [style.align]="'center'">
         <th>Rankings</th>
         <th>Collection Rank</th>
@@ -14,14 +14,14 @@
       </tr>
       <tr [style.text-align]="'center'">
         <td><ion-icon name="star"></ion-icon></td>
-        <td>{{mnemonic.collectionStarRank}}</td>
-        <td>{{mnemonic.globalStarRank}}</td>
+        <td>{{mnemonic?.collectionStarRank}}</td>
+        <td>{{mnemonic?.globalStarRank}}</td>
       </tr>
       <tr [style.text-align]="'center'">
         <td><ion-icon name="eye"></ion-icon></td>
-        <td>{{mnemonic.collectionViewRank}}</td>
-        <td>{{mnemonic.globalViewRank}}</td>
-      </tr>
-    </table>
+        <td>{{mnemonic?.collectionViewRank}}</td>
+        <td>{{mnemonic?.globalViewRank}}</td>
+      </tr>  -->
+    <!-- </table>
     <div [ngStyle]="{'color':'red','text-align':'center'}">Placeholder</div>
-</ion-card>
+</ion-card> -->

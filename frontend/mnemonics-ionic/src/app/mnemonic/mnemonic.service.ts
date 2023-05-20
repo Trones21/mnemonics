@@ -17,6 +17,18 @@ export class MnemonicService {
     return obj.profile;
   }
 
+  async getMnemonics(mnemonicIds: Array<string>){
+    let idsStr = ''
+    for(let id of mnemonicIds){
+      idsStr += id + ','
+    }
+    idsStr = idsStr.slice(0, idsStr.lastIndexOf(','))
+    let res = await fetch(`${this.baseUrl}/mnemonic?ids=[${idsStr}]`)
+    let obj = await res.json();
+    console.log(obj.profile)
+    return obj.profile;
+  }
+
   async createMnemonic(mnemonic: any){
     let res = await fetch(`${this.baseUrl}/mnemonic?new`,{
         method:'POST',

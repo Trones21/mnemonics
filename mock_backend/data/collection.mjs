@@ -10,6 +10,7 @@ const collection = {
     updatedAt: "2011-09-05T06:31:12.212Z",
     mnemonics:[
         {
+            id: "11125fe604e175c2a4a8265e9",
             name:"PEMDAS",
             hint:"Please Excuse My Dear Aunt Sally",
             answer:"PEMDAS - Parentheses, Exponents, Multiplication/Division (Left to Right), Addition/Subtraction (Left to Right)",
@@ -19,6 +20,7 @@ const collection = {
             updatedAt: "2011-09-05T06:31:12.212Z"
         },
         {
+            id: "22225fe604e175c2a4a8265e9",
             name:"FOIL",
             hint:"FOIL - Distributing binomials",
             answer:`In order to get the ax2+bx+c form, we must FOIL out (2x−5)2.
