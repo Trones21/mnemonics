@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common'
 })
 export class SingleCollectionPage{
     @Input() id = '' 
-    collection!: Collection; //= {id: '1', name: 'Loading...'}
+    collection: Collection = {id: '1', name: 'Loading...'}
     constructor(private collectionService: CollectionService) {
     }
 
@@ -41,7 +41,7 @@ export interface Collection {
     id: string,
     name: string,
     mnemonicCount?: number,
-    mnemonics?: Array<Mnemonic>
+    mnemonics?: Mnemonic[]
 }
 
 
