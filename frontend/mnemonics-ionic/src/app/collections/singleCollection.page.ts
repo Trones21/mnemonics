@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular'
 import { CollectionService } from './collection.service'
 import { Mnemonic, MnemonicCard } from '../components/mnemonicCard'
 import { CommonModule } from '@angular/common'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
     selector: 'app-single-collection',
@@ -15,24 +16,32 @@ import { CommonModule } from '@angular/common'
     ]
 })
 export class SingleCollectionPage{
-    @Input() id = '' 
     collection: Collection = {id: '1', name: 'Loading...'}
-    constructor(private collectionService: CollectionService) {
+    constructor(private collectionService: CollectionService, private route: ActivatedRoute) {
     }
 
     ngOnInit(){
-        console.log('input', this.id)
-        this.collectionService.getCollectionByID(this.id, true).then(c => {
+        let id: string = String(this.route.snapshot.paramMap.get('id'))
+        if(id.length == 0){
+            console.error('Unable to get id parameter from route')
+        }
+        this.collectionService.getCollectionByID(id, true).then(c => {
             
             if(!c.mnemonics){
                 console.error('Collection mising mnemonics property (check spelling)', c)
             }
   
             this.collection = c;
+            this.collection.mnemonicCount = this.collection.mnemonics?.length
             console.log(this.collection)
+
             //this.collection.mnemonicCards = (c.mnemonics as MnemonicCard)            
     })
 }
+
+    navBack(){
+        console.warn("To implement -- need the id of the category")
+    }
 }
 
 
@@ -40,6 +49,8 @@ export class SingleCollectionPage{
 export interface Collection {
     id: string,
     name: string,
+    stars?: number,
+    views?: number,
     mnemonicCount?: number,
     mnemonics?: Mnemonic[]
 }

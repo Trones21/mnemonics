@@ -15,9 +15,7 @@ import { MnemonicService } from "../mnemonic/mnemonic.service";
     ]
 })
 export class MnemonicCard {
-    // @Input() name: string = '';
-    // @Input() views: number = 0;
-    @Input() m!: Mnemonic;
+    @Input() mnemonic!: Mnemonic;
 }
 
 export interface Mnemonic{
@@ -25,19 +23,12 @@ export interface Mnemonic{
     name: string
     stars: number
     views: number
+    hint: string
+    answer: string
     globalViewRank: number
     globalStarRank: number
     collectionViewRank?: number
     collectionStarRank?: number
+    createdAt: IonDatetime
+    updatedAt: IonDatetime
 }
-
-
-// export class MnemonicCard {
-//     mnemonic: Mnemonic | null = null;
-//     constructor(){
-//     }
-//     ngOnInit(mnemonic: Mnemonic){
-//         this.mnemonic = mnemonic;
-//     }
-// }
-

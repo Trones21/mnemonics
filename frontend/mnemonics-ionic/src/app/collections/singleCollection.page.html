@@ -1,4 +1,6 @@
+<ion-header slot="fixed">
 <ion-toolbar>
+    <ion-icon slot="start" name="arrow-back" (click)="navBack()"></ion-icon>
     <ion-buttons slot="secondary">
       <ion-button>
         <ion-icon slot="icon-only" name="person-circle"></ion-icon>
@@ -13,14 +15,35 @@
       </ion-button>
     </ion-buttons>
     <ion-title>{{collection.name}}</ion-title>
-  </ion-toolbar>
+</ion-toolbar>
+<ion-card>
+  <ion-grid>
+    <ion-row>
+      <ion-col>Mnemonics</ion-col>
+      <ion-col>Stars</ion-col>
+      <ion-col>Views</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>{{this.collection.mnemonicCount}}</ion-col>
+      <ion-col>{{this.collection.stars}}</ion-col>
+      <ion-col>{{this.collection.views}}</ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-card>
+</ion-header>
 
-<ion-content [fullscreen]="true">
+
+<ion-content 
+[fullscreen]="false"
+[style.height]="'300%'">
+
+  
   <ng-template ngFor let-item [ngForOf]="collection.mnemonics">
-    <app-mnemonicCard [m]="item"></app-mnemonicCard>
+    <app-mnemonicCard [mnemonic]="item"></app-mnemonicCard>
   </ng-template>
   <!-- Shorthand
   <app-mnemonicCard [m]="mVar" *ngFor="let mVar of collection.mnemonics"></app-mnemonicCard>
    -->
 </ion-content>
+
  

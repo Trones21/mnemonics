@@ -22,7 +22,7 @@ export class CollectionService {
 
 
   async getCollectionByID(collectionId: string, includeMnemonicDetails: boolean): Promise<Collection>{
-      let res = await fetch(`${this.baseUrl}/collection/${collectionId}?includeMnemonicDetails=${includeMnemonicDetails}`)
+      let res = await fetch(`${this.baseUrl}/collections/details/${collectionId}?includeMnemonicDetails=${includeMnemonicDetails}`)
       let obj = await res.json();
       let collection = (obj.collection as Collection);
       return collection

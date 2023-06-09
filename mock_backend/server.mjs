@@ -34,6 +34,11 @@ app.get('/profile/:id', function (req, res) {
   res.json(profile);
 })
 
+app.get('/collections/details/:id', cors(), function (req, res) {
+  console.log('sample collection')
+  res.json(collection);
+})
+
 app.get('/categories/', cors(), function (req, res) {
   res.json(categories);
 })
@@ -49,10 +54,7 @@ app.get('/mnemonics?filter=:filterLogic', cors(), function (req, res) {
   //res.json(mnemonics);
 })
 
-app.get('/collection/:id', cors(), function (req, res) {
-  console.log('sample collection')
-  res.json(collection);
-})
+
 
 app.get('/collections?categoryId=', cors(), function (req, res) {
   

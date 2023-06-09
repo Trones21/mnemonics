@@ -1,6 +1,6 @@
 const categories = [{
     id: '1',
-    name: 'Medical',
+    name: 'Medical - N/A',
     collectionCount: 14 
 },
 {
@@ -10,7 +10,7 @@ const categories = [{
 },
 {
     id: '3',
-    name: 'Biology',
+    name: 'Biology - N/A',
     collectionCount: 4 
 },
 ]

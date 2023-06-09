@@ -1,7 +1,7 @@
 
 
 const collection = {
-    name: "Math",
+    name: "Algebra",
     logoPath:'',
     id: "6425fe604e175c2a4a8265e9",
     stars: 51,
