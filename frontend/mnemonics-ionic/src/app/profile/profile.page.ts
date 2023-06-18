@@ -3,10 +3,24 @@ import { CollectionCard } from '../components/collectionCard';
 import { CollectionInfo } from '../components/collectionCard';
 import { ProfileService } from './profile.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile',
-  templateUrl: 'profile.page.html'
+  standalone: true,
+  templateUrl: 'profile.page.html',
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    ExploreContainerComponentModule,
+    CollectionCard
+  ],
+  providers:[HttpClient],
 })
 
 export class ProfilePage implements OnInit{

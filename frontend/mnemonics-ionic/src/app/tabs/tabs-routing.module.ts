@@ -6,8 +6,10 @@ import { CollectionCard } from '../components/collectionCard';
 import { MnemonicCard } from '../components/mnemonicCard';
 import { SingleCollectionPage } from '../collections/singleCollection.page';
 import { ProfilePage } from '../profile/profile.page';
+import { EditorPage } from '../editor/editor.page';
 import { ProfileService } from '../profile/profile.service';
 import { DataService } from '../data.service';
+import { PracticeSetupPage } from '../practice/practiceSetup.page';
 import { Sandbox } from '../helpers/sandbox.page';
 
 
@@ -18,12 +20,12 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'swiper',
-        loadChildren: () => import('../swiper/swiper.module').then(m => m.SwiperPageModule)
+        path: 'practice',
+        loadComponent:() => import('../practice/practiceSetup.page').then(m => m.PracticeSetupPage)
       },
       {
         path: 'editor',
-        loadChildren: () => import('../editor/editor.module').then(m => m.EditorPageModule)
+        loadComponent: () => import('../editor/editor.page').then(m => m.EditorPage)
       },
       
       {
@@ -31,8 +33,8 @@ const routes: Routes = [
         loadChildren: () => import('../collections/collections.module').then(m => m.CollectionsPageModule)
       },
       {
-        path: 'profile',
-        loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
+        path: 'profile/:id',
+        loadComponent: () => import('../profile/profile.page').then(m => m.ProfilePage)
       },
 
       //Place components here to see them in isolation

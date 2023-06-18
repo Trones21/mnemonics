@@ -1,9 +1,31 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
-import { GestureController, IonCard, Platform } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { GestureController, IonCard, IonicModule, Platform } from '@ionic/angular';
+import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 @Component({
-  selector: 'swiper',
-  templateUrl: 'swiper.page.html',
+  selector: 'app-practice-swiper',
+  standalone:true,
+  template: `<ion-content class="ion-padding" [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Swiper</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card *ngFor=" let m of mnemonics" [style.position]="'absolute'" [style.width]="'75%'" [style.height]="'75%'">
+    <ion-card-title>{{m.MemoryTip}}</ion-card-title>
+    <ion-card-content>{{m.ItemToRemember}}</ion-card-content>
+  </ion-card>
+
+</ion-content>`,
+  imports:[
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    ExploreContainerComponentModule,
+  ]
 
 })
 export class SwiperPage implements AfterViewInit{
